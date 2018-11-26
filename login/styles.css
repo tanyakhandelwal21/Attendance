@@ -1,0 +1,121 @@
+body{
+    background-color: bisque;
+}
+.navbar-inverse .navbar-brand {
+    color: darkgoldenrod;
+}
+.navbar-inverse .navbar-nav > li > a {
+    color: darkgoldenrod;
+}
+  .navbar-inverse .navbar-nav > li > a:hover,
+.navbar-inverse .navbar-nav > li > a:focus {
+    color: gold;
+}
+.navbar-inverse .navbar-nav > .active > a,
+.navbar-inverse .navbar-nav > .active > a:hover,
+.navbar-inverse .navbar-nav > .active > a:focus {
+       color: bisque;
+}
+
+.overlay {
+    width: 100%;
+    z-index: 1;
+    top: 50px;
+    left: 0;
+    font-size: 17px;
+}
+
+.overlay-content {
+    position: relative;
+    top: 46%;
+    width: 100%;
+    margin-top: 30px;
+    margin-bottom: 30px;
+ 
+}
+
+.overlay input[type=text] {
+    padding: 10px;
+    font-size: 17px;
+    border: none;
+    width: 50%;
+    background: white;
+    text-align: center;
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 5px;
+}
+
+.overlay input[type=password] {
+    padding: 10px;
+    font-size: 17px;
+    border: none;
+    width: 50%;
+    background: white;
+    text-align: center;
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 5px;
+}
+
+.overlay input[type=date] {
+    padding: 10px;
+    font-size: 17px;
+    border: none;
+    background: white;
+    text-align: center;
+    display: block;
+    margin: 0 auto;
+    display: inline;
+}
+
+.overlay label{
+    padding: 10px;
+    text-align: center;
+    margin-left: 40%;
+
+}
+.overlay button {
+    width: 50%;
+    padding: 10px;
+    background: #ddd;
+    font-size: 17px;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    display: block;
+    margin: 0 auto;
+    
+}
+
+.overlay button:hover {
+    background: #bbb;
+}
+
+.in-line {display: inline;}
+
+.bold{
+    font-weight:bold;
+    display: inline-block;
+}
+
+.vertical-menu {
+    width: 90%;
+    height: 100px;
+    overflow-y: auto;
+    background-color: oldlace;
+    border: 1px dimgrey solid;
+}
+
+.vertical-menu h5 {
+    color: black;
+    padding: 5px;
+}
+
+.list-group-item{
+    background-color: antiquewhite;
+}
+
+.list-group-item a{
+    color: dimgrey;
+}
