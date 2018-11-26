@@ -69,12 +69,6 @@ body{
     display: inline;
 }
 
-.overlay label{
-    padding: 10px;
-    text-align: center;
-    margin-left: 40%;
-
-}
 .overlay button {
     width: 50%;
     padding: 10px;
@@ -87,35 +81,20 @@ body{
     margin: 0 auto;
     
 }
+.radio-label {
+    display: inline-block;
+     vertical-align: top;
+     margin-right: 3%;
+ }
+ .radio-input {
+    display: inline-block;
+     vertical-align: top;
+ }
+
+ .radio-div{
+    text-align: center
+ }
 
 .overlay button:hover {
     background: #bbb;
-}
-
-.in-line {display: inline;}
-
-.bold{
-    font-weight:bold;
-    display: inline-block;
-}
-
-.vertical-menu {
-    width: 90%;
-    height: 100px;
-    overflow-y: auto;
-    background-color: oldlace;
-    border: 1px dimgrey solid;
-}
-
-.vertical-menu h5 {
-    color: black;
-    padding: 5px;
-}
-
-.list-group-item{
-    background-color: antiquewhite;
-}
-
-.list-group-item a{
-    color: dimgrey;
 }

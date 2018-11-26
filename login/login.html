@@ -20,7 +20,7 @@
       </div>
       <ul class="nav navbar-nav">
         <li class="active"><a href="#">Login</a></li>
-        <li><a href="create_account.html">Create a new account</a></li>
+        <li><a href="create-account.html">Create a new account</a></li>
       </ul>
     </div>
   </nav>
@@ -28,8 +28,12 @@
   <div id="myOverlay" class="overlay">
     <div class="overlay-content">
       <form method="POST" action="/login">
-        <input type="text" placeholder="Username" id="username">
+        <input type="text" placeholder="Email" id="email">
         <input type="password" placeholder="Password" id="password"><br>
+        <h4 class="text-center">User Type</h4>
+        <input name="public" type="radio" value="instructor"><h4 class="text-center in-line"> Instructor</h4> <br>    
+        <input name="public" type="radio" value="studnet"><h4 class="text-center in-line"> Student</h4> <br>    
+
         <button type="submit" id="submitbtn">Login</button> 
       </form>
     </div>
