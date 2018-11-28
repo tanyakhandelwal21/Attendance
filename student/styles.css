@@ -1,0 +1,14 @@
+
+body{
+    background-color: cadetblue;
+    height: 100%;
+    width: 100%
+}
+
+.card {
+    background-color: rgb(199, 227, 230);
+}
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    background-color: rgb(173, 209, 219) ;
+}

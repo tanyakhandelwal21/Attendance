@@ -1,20 +1,28 @@
 body{
-    background-color: bisque;
+    background-color: cadetblue;
 }
-.navbar-inverse .navbar-brand {
-    color: darkgoldenrod;
+.navbar-default .navbar-brand {
+    color: cadetblue;
 }
-.navbar-inverse .navbar-nav > li > a {
-    color: darkgoldenrod;
+.navbar-default .navbar-brand:hover {
+    color: cadetblue;
 }
-  .navbar-inverse .navbar-nav > li > a:hover,
-.navbar-inverse .navbar-nav > li > a:focus {
-    color: gold;
+.navbar-default .navbar-brand > li > a:hover,
+.navbar-default .navbar-brand > li > a:focus {
+
+    color: cadetblue;
 }
-.navbar-inverse .navbar-nav > .active > a,
-.navbar-inverse .navbar-nav > .active > a:hover,
-.navbar-inverse .navbar-nav > .active > a:focus {
-       color: bisque;
+.navbar-default .navbar-nav > li > a {
+    color: cadetblue;
+}
+  .navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+    color: rgb(94, 205, 209);
+}
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+       color: cadetblue;
 }
 
 .overlay {

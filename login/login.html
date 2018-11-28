@@ -13,10 +13,10 @@
 </head>
 
 <body>
-  <nav class="navbar navbar-inverse">
+  <nav class="navbar navbar-default">
     <div class="container-fluid">
       <div class="navbar-header">
-        <a class="navbar-brand" href="../index.html">Attendance</a>
+        <li class="navbar-brand" >Attendance</li>
       </div>
       <ul class="nav navbar-nav">
         <li class="active"><a href="#">Login</a></li>
@@ -27,13 +27,10 @@
   
   <div id="myOverlay" class="overlay">
     <div class="overlay-content">
-      <form method="POST" action="/login">
+      <form method="POST" action="/student/courses.html">
+        <br><br><br>
         <input type="text" placeholder="Email" id="email">
         <input type="password" placeholder="Password" id="password"><br>
-        <h4 class="text-center">User Type</h4>
-        <input name="public" type="radio" value="instructor"><h4 class="text-center in-line"> Instructor</h4> <br>    
-        <input name="public" type="radio" value="studnet"><h4 class="text-center in-line"> Student</h4> <br>    
-
         <button type="submit" id="submitbtn">Login</button> 
       </form>
     </div>
