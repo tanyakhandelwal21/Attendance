@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Attendance</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+       
+<style>
+    
+    .navbar-default .navbar-brand {
+        color: #4E0A0A;
+        text-align: center;
+        font-family: monospace;
+        font-size: 60px;
+    }    
+    body {
+        background-color: #FFFFE9;
+    }
+    .navbar-default {
+        background-color: #FFFFE9;
+        border: none;
+        width: 100%
+    }
+    h1 {
+        font-family: fantasy;
+        color: #4E0A0A;
+        text-align: center
+    }
+    h1:hover {
+        color: #4E0A0A;
+    }
+    ul {
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                background-color: #4E0A0A;
+            }
+
+    li {
+        float: right;
+    }
+
+    li a {
+        display: block;
+        color: white;
+        font-family: serif;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+    }
+
+    li a:hover {
+        background-color: #681C1C;
+        color: white;
+        color: white;
+    }
+    h2 {
+        color: #4E0A0A;
+        align-content: center;
+        align-items: center;
+        position: relative;
+        text-align: center
+    }
+    .overlay {
+    width: 100%;
+    z-index: 1;
+    top: 50px;
+    left: 0;
+    font-size: 17px;
+}
+
+.overlay-content {
+    position: relative;
+    top: 36%;
+    width: 100%;
+    margin-top: 30px;
+    margin-bottom: 30px;
+ 
+}
+
+.overlay input[type=text] {
+    padding: 10px;
+    font-size: 17px;
+    border: none;
+    width: 50%;
+    background: white;
+    text-align: center;
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 5px;
+}
+
+.overlay input[type=password] {
+    padding: 10px;
+    font-size: 17px;
+    border: none;
+    width: 50%;
+    background: white;
+    text-align: center;
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 5px;
+}
+
+.overlay button[type=submit] {
+    text-align: center;
+    align-content: center;
+    align-items: center;
+    align-self: center;
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    border: none;
+    width: 80%;
+                background-color: #4E0A0A;
+                color: white;
+                padding: 14px 20px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+}
+
+</style>
+<body>
+    <a href="Login.html"><h1>ATTENDANCE</h1></a>
+    <ul>
+      <li><a class="active" href="CreateAccount.html">Create a new account</a></li>
+    </ul>
+    <div id="myOverlay" class="overlay">
+    <div class="overlay-content">
+        <input type="text" placeholder="Email" id="email">
+        <input type="password" placeholder="Password" id="password"><br>
+          <a href = "InstructorDashboard.html"><button type="submit" id="submitbtn">Login</button></a> 
+    
+    </div>
+  </div>
+</body>
