@@ -1,0 +1,102 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <title>Add a new poll</title>
+      <meta charset="utf-8">
+      <h1>Add a new poll</h1>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <style>
+            .btn {
+                border: none;
+                padding: 39px;
+                font-family: serif;
+                display: inline-block;
+            }
+
+            /* button for adding a new class */
+            .new {
+                color: #4E0A0A;
+                background-color: #FFFFE9;
+                font-size: 40px;
+            }
+
+            .new:hover {
+                background-color: #FFFFE9;
+                color: #681C1C;
+            }
+
+            /* button for classes */
+            .basic {
+                color: white;
+                background-color: #4E0A0A;
+
+            }
+            .basic:hover {
+                background: #681C1C;
+                color: white;
+            }
+            h1 {
+                color: #4E0A0A;
+                font-family: fantasy;
+                text-align: center;
+                font-family: fantasy;
+                font-size: 49px;
+
+            }
+            input[type=text], select {
+                width: 100%;
+                padding: 12px 20px;
+                margin: 8px 0;
+                display: inline-block;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                box-sizing: border-box;
+            }
+  input[type=submit] {
+                width: 100%;
+                background-color: #4E0A0A;
+                color: white;
+                padding: 14px 20px;
+                margin: 8px 0;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+          
+
+input[type=submit]:hover {
+    background-color: #681C1C;
+}
+            body {
+                background-color: #FFFFE9
+            }
+        </style>
+    </head>
+    <body>
+    <div class="container">
+        
+        <form action="/action_page.php">
+        Question: <input type="text" name="question" value="Enter the question here"><br><br>
+A: <input type="text2" name="optionA" value="Option A"><br><br>
+B: <input type="text2" name="optionB" value="Option B"><br><br>
+C: <input type="text2" name="optionC" value="Option C"><br><br>
+D: <input type="text2" name="optionD" value="Option D"><br><br>
+            Select the correct answer:
+        <select name="cars">
+    <option value="AnsoptionA">A</option>
+    <option value="AnsoptionB">B</option>
+    <option value="AnsoptionC">C</option>
+    <option value="AnsoptionD">D</option>
+  </select>
+  <br><br>
+            <a href="InstructorCourse.html"><input type="submit" value="Add"></a>
+</form>
+        </div>
+
+
+    </body>
+    </html>
