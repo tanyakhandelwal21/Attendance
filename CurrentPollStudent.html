@@ -1,13 +1,15 @@
     <!DOCTYPE html>
     <html lang="en">
     <head>
-      <title>Instructor Dashboard</title>
+      <title>Current Poll</title>
       <meta charset="utf-8">
-      <h1> Instructor Dashboard</h1>
+      <h1> Current Poll</h1>
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js">
+    
+        </script>
 
         <style>
             .btn {
@@ -82,18 +84,26 @@
             }
         </style>
     </head>
-    <body><ul>
-      <li><a class="active" href="Login.html">Logout</a></li>
-    </ul>
+    <body>
+        <h2>QUESTION: How amazing is this web application?</h2> 
         <br>
 
     <div class="container">
 
-        <a href="InstructorCourse.html"> <button type="button" class="btn btn-primary btn-lg btn-block basic">CS 180</button></a> <br><br>
-        <a href="InstructorCourse.html"> <button type="button" class="btn btn-primary btn-lg btn-block basic">CS 240</button></a> <br><br><a href="InstructorCourse.html"> <button type="button" class="btn btn-primary btn-lg btn-block basic">CS 252</button></a> <br><br><a href="InstructorCourse.html"> <button type="button" class="btn btn-primary btn-lg btn-block basic">CS 250</button></a> <br><br>
-        <button type =  "button" class="btn btn-primary btn-lg btn-block new"><a href="NewCourse.html" style="color: #4E0A0A">+ Add a new class</a></button>
+        <a href="StudentCourse.html"><button type="button" class="btn btn-primary btn-lg btn-block basic" onclick="recordAnswer()">Amazing</button><br><br></a>
+        
+        <script>
+        function recordAnswer() {
+            alert('Your answer has been recorded!');
+        }
+        </script>
+        <a href="StudentCourse.html"><button type="button" class="btn btn-primary btn-lg btn-block basic" onclick="recordAnswer()">Good</button><br><br></a>
+        
+        <a href="StudentCourse.html"><button type="button" class="btn btn-primary btn-lg btn-block basic" onclick="recordAnswer()">Bad</button><br><br></a><a href="StudentCourse.html"><button type="button" class="btn btn-primary btn-lg btn-block basic" onclick="recordAnswer()">Kill me</button><br><br></a>
         </div>
         
 
     </body>
+        
+        
     </html>

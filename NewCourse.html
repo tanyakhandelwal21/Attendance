@@ -8,7 +8,7 @@
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
+
         <style>
             .btn {
                 border: none;
@@ -104,35 +104,17 @@ li a:hover {
     </head>
     <body>
         <ul>
-  <li><a class="active" href="InstructorDashboard">Back to Instructor Dashboard</a></li>
+  <li><a class="active" href="InstructorDashboard.html">Back to Instructor Dashboard</a></li>
 </ul>
         <br>
-        <center><p id="user" class="active">Currently Logged in as: </p></center>
     <div class="container">
-       <!-- <form>-->
-      Class Name: <input type="text" name="fname" id="courseName"><br>
-      Invite Students by email, seperated by commas: <input id="emails" type="text" name="emails"><br>
-      <input id="submitbtn" type="submit" value="Add">
-   <!-- </form>-->
+        <form action="/action_page.php">
+      Class Name: <input type="text" name="fname"><br>
+      Invite Students by email, seperated by commas: <input type="text" name="emails"><br>
+      <input type="submit" value="Add">
+    </form>
         </div>
 
 
     </body>
-    <script>
-          var socket = io.connect("http://localhost:8000");
-    document.getElementById("user").innerHTML = "Currently logged in as: "+sessionStorage.getItem('userEmail');
-    
-    function createNewClass(){
-        var emails = document.getElementById("emails").value.split(" ").join("").split(",");
-        var data = {
-            Instructor: sessionStorage.getItem("userEmail"),
-            courseName: document.getElementById("courseName").value,
-            students: emails
-        }
-
-        socket.emit("createNewCourse", data);
-    }
-    document.getElementById("submitbtn").addEventListener("click", createNewClass);
-    </script>
-
     </html>

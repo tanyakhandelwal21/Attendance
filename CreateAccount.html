@@ -8,9 +8,9 @@
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
-      <!--<script src="./javascriptClient/createacc.js"></script>-->
+      
       </head>
+      
         <style>
         h1 {
                 color: #4E0A0A;
@@ -106,7 +106,7 @@
         </style>
       <body>
           <ul>
-      <li><a class="active" href="login">Existing User?</a></li>
+      <li><a class="active" href="Login.html">Existing User?</a></li>
     </ul>
         <br>
   
@@ -127,33 +127,7 @@
             <label class="radio-label">Instructor</label>
         </div>
         <br>
-          <button type="submit" id="submitbtn">Create Account</button>
+          <a href="login.html"><button type="submit" id="submitbtn">Create Account</button></a>
     </div>
   </div>
-  <script>
-     var socket = io.connect("http://localhost:8000");
-    document.getElementById("submitbtn").addEventListener("click",()=>{
-        if(document.getElementById("password").value != document.getElementById("confirm-password").value){
-            alert("passwords do not match!");
-            return;
-        }
-        let firstName = document.getElementById("fname").value;
-        let lastName = document.getElementById("lname").value;
-        let email = document.getElementById("email").value;
-        let password = document.getElementById("password").value;
-        var type;
-        var radios = document.getElementsByName('test');
-        (radios[0].checked) ? type = radios[0].value : type = radios[1].value;
-        
-        let data = {
-            firstName,
-            lastName,
-            email,
-            password,
-            userType:type
-        };
-        socket.emit("register", data);
-        alert("Account registered!");
-    })
-  </script>
       </body>
