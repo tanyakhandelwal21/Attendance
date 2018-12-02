@@ -8,7 +8,7 @@
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
         <style>
             .btn {
                 border: none;
@@ -87,13 +87,21 @@
     </ul>
         <br>
 
-    <div class="container">
-
-        <a href="InstructorCourse.html"> <button type="button" class="btn btn-primary btn-lg btn-block basic">CS 180</button></a> <br><br>
-        <a href="InstructorCourse.html"> <button type="button" class="btn btn-primary btn-lg btn-block basic">CS 240</button></a> <br><br><a href="InstructorCourse.html"> <button type="button" class="btn btn-primary btn-lg btn-block basic">CS 252</button></a> <br><br><a href="InstructorCourse.html"> <button type="button" class="btn btn-primary btn-lg btn-block basic">CS 250</button></a> <br><br>
-        <button type =  "button" class="btn btn-primary btn-lg btn-block new"><a href="NewCourse.html" style="color: #4E0A0A">+ Add a new class</a></button>
+    <div class="container" id="container"> 
+        <button type =  "button" class="btn btn-primary btn-lg btn-block new"><a href="NewCourse" style="color: #4E0A0A">+ Add a new class</a></button>
         </div>
         
+        <script>
+            var socket = io.connect("http://localhost:8000");
+        var loginInfo = sessionStorage.getItem("userEmail");
+        socket.emit("getInstructorClasses", {email:loginInfo});
 
+        socket.on("classInfo", (data)=>{
+            console.log(data.classIDs);
+            for(var i = 0; i < data.classIDs.length; i++){
+                document.getElementById("container").innerHTML+="<button type='button' id='"+data.classIDs[i]+"' class='btn btn-primary btn-lg btn-block basic'>" + data.classNames[i] + "</button>";
+            }
+        })
+        </script>
     </body>
     </html>

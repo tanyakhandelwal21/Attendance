@@ -1,0 +1,19 @@
+{
+  "name": "cs252lab6",
+  "version": "1.0.0",
+  "description": "server for attendance app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tanyakhandelwal21/CS252LAB6.git"
+  },
+  "author": "conner isaacs",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tanyakhandelwal21/CS252LAB6/issues"
+  },
+  "homepage": "https://github.com/tanyakhandelwal21/CS252LAB6#readme"
+}
