@@ -3,7 +3,7 @@
 <head>
   <title>CS 180</title>
   <meta charset="utf-8">
-  <h1>CS 180</h1>
+  <h1 id="className">CS 180</h1>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -82,17 +82,18 @@ li a:hover {
 <body>
      
 <ul>
-  <li><a class="active" href="StudentDashboard.html">Back to Student Dashboard</a></li>
+  <li><a class="active" href="StudentDashboard">Back to Student Dashboard</a></li>
 </ul>
 <div class="container">
    <div id="currentPolls">
   <h2>Current Poll</h2>
-    
+    <center><p id="noPolls"> There are no current polls to vote on!</p></center>
     </div>
 </div>
 
 </body>
 <script>
+    document.getElementById('className').innerHTML =sessionStorage.getItem('currentClassName');
     var socket = io.connect("http://localhost:8000");
     socket.emit("getPolls", {classID: sessionStorage.getItem("currentClass")});
     socket.on("returnPolls", (data)=>{
@@ -104,12 +105,13 @@ li a:hover {
     })
     function currentClicked(e){
         sessionStorage.setItem("currentPoll", e);
-        window.location.href = "CurrentPoll";
+        window.location.href = "CurrentPollStudent";
     }
     socket.on("returnPollInfo", (data)=>{
         if(data.status == "current"){
             document.getElementById("currentPolls").innerHTML+= "<button id='" + data.pollID + "' onClick='currentClicked(this.id)' type='button' class='btn btn-primary btn-lg btn-block basic'>"+data.question + "</button>";
-        }
+            document.getElementById('noPolls').innerHTML = "";
+    }
     })
 </script>
 </html>

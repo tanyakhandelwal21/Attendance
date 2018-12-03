@@ -7,10 +7,8 @@
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js">
-    
-        </script>
-
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
         <style>
             .btn {
                 border: none;
@@ -85,25 +83,48 @@
         </style>
     </head>
     <body>
-        <h2>QUESTION: How amazing is this web application?</h2> 
+        <center><h2 id="question">QUESTION: How amazing is this web application?</h2></center>
         <br>
 
     <div class="container">
+        
+        <button id='optA' type="button" class="btn btn-primary btn-lg btn-block basic">Good</button>
+        
+        <button id='optB' type="button" class="btn btn-primary btn-lg btn-block basic" >Bad</button>
 
-        <a href="StudentCourse.html"><button type="button" class="btn btn-primary btn-lg btn-block basic" onclick="recordAnswer()">Amazing</button><br><br></a>
-        
-        <script>
-        function recordAnswer() {
-            alert('Your answer has been recorded!');
-        }
-        </script>
-        <a href="StudentCourse.html"><button type="button" class="btn btn-primary btn-lg btn-block basic" onclick="recordAnswer()">Good</button><br><br></a>
-        
-        <a href="StudentCourse.html"><button type="button" class="btn btn-primary btn-lg btn-block basic" onclick="recordAnswer()">Bad</button><br><br></a><a href="StudentCourse.html"><button type="button" class="btn btn-primary btn-lg btn-block basic" onclick="recordAnswer()">Kill me</button><br><br></a>
-        </div>
+        <button id='optC' type="button" class="btn btn-primary btn-lg btn-block basic" >Bad</button>
+
+        <button id='optD' type="button" class="btn btn-primary btn-lg btn-block basic" >Bad</button>
+    </div>
         
 
     </body>
-        
+        <script>
+        var socket = io.connect("http://localhost:8000");
+var poll = sessionStorage.getItem("currentPoll");
+socket.emit("getPollStatus", {pollID: poll});
+
+socket.on("returnPollInfo", (data)=>{
+    document.getElementById("question").innerHTML = data.question;
+    document.getElementById("optA").innerHTML = data.options[0];
+    document.getElementById("optB").innerHTML = data.options[1];
+    document.getElementById("optC").innerHTML = data.options[2];
+    document.getElementById("optD").innerHTML = data.options[3];
+
+    document.getElementById('optA').addEventListener('click', (e)=>{
+        socket.emit('vote', {id: e.target.id, user: sessionStorage.getItem("userEmail"), pollID: sessionStorage.getItem('currentPoll')});
+    })
+    document.getElementById('optB').addEventListener('click', (e)=>{
+        socket.emit('vote', {id: e.target.id, user: sessionStorage.getItem("userEmail"), pollID: sessionStorage.getItem('currentPoll')});
+    })
+    document.getElementById('optC').addEventListener('click', (e)=>{
+        socket.emit('vote', {id: e.target.id, user:sessionStorage.getItem("userEmail"), pollID: sessionStorage.getItem('currentPoll')});
+    })
+    document.getElementById('optD').addEventListener('click', (e)=>{
+        socket.emit('vote', {id: e.target.id, user: sessionStorage.getItem("userEmail"), pollID: sessionStorage.getItem('currentPoll')});
+    })
+})
+
+        </script>
         
     </html>

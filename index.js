@@ -41,6 +41,7 @@ var pollSchema = {
     correctAnswer:String,
     options:[String],
     studentsVoted:[String],
+    studentVotes:[String],
     status:String
 }
 
@@ -93,6 +94,10 @@ app.get('/InstructorCourse', function(req, res) {
 
 app.get('/StudentCourse', function(req, res){
     res.sendFile('StudentCourse.html', {root: __dirname})
+})
+
+app.get("/CurrentPollStudent", function(req, res){
+    res.sendFile('CurrentPollStudent.html', {root: __dirname})
 })
 app.get('/CreateAccount', function(req, res) {
     res.sendFile('CreateAccount.html', {root: __dirname })
@@ -190,7 +195,55 @@ io.on('connection',(socket)=>{
     // what ever u want to do with the updated document
   })
 })
+socket.on('vote', (data)=>{
+    console.log("made it to vote event");
+    var user = data.user;
+    var vote;
+    switch(data.id){
+        case 'optA':
+        vote = 'A';
+        break;
+        case 'optB':
+        vote = 'B';
+        break;
+        case 'optC':
+        vote = 'C';
+        break;
+        case 'optD':
+        vote = 'D';
+        break;
+    }
+    pollID = data.pollID;
+    var studentAlreadyVoted=false;
+    var votedIndex = -1;
+    poll.findOne({'pollID':pollID}, (err, info)=>{
+        if(info){
+            for(var i = 0; i < info.studentsVoted.length; i++){
+                if(info.studentsVoted[i] == user){
+                    console.log('student already voted!');
+                    studentAlreadyVoted = true;
+                    info.studentVotes[i] = vote;
+                     poll.findOneAndUpdate(
+                        { "pollID": pollID },
+                        { $set: { studentsVoted: info.studentsVoted, studentVotes: info.studentVotes } },
+                        { new: true },
+                        (err, updatedDoc) => {
+    // 
+                        })
+                        return;
+                }
+            }
+        }
+    })
+    poll.findOneAndUpdate(
+  { "pollID": pollID },
+  { $push: { studentsVoted: user, studentVotes: vote } },
+  { new: true },
+  (err, updatedDoc) => {
+    // 
 
+})
+})
 socket.on("getPollStatus", (data)=>{
     poll.findOne({pollID: data.pollID}, (err, info)=>{
         socket.emit("returnPollInfo", info);

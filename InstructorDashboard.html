@@ -83,7 +83,7 @@
         </style>
     </head>
     <body><ul>
-      <li><a class="active" href="Login.html">Logout</a></li>
+      <li><a class="active" href="/">Logout</a></li>
     </ul>
         <br>
 
@@ -106,6 +106,7 @@
             for(var i = 0; i < classes.length; i++){
                 classes[i].addEventListener("click", (e)=>{
                     sessionStorage.setItem("currentClass",e.target.id);
+                    sessionStorage.setItem('currentClassName', e.target.innerHTML);
                     window.location.href = "InstructorCourse";
                 })
             }
