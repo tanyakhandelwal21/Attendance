@@ -11,6 +11,13 @@ var personSchema = {
   userType:String,
 };
 
+var studentSchema = {
+    studentName:String,
+    studentEmail:String,
+    classIDs:[String],
+    classNames:[String]
+}
+
 var instructorSchema = {
     instructorName:String,
     instructorEmail:String,
@@ -54,6 +61,10 @@ var course = conn3.model('course', classSchema);
 var conn4 =  mongoose.createConnection('mongodb://cylthus:skittles1@ds123664.mlab.com:23664/lab6polls');
 var poll = conn4.model('poll', pollSchema);
 
+//connect to student database
+var conn5 = mongoose.createConnection('mongodb://cylthus:skittles1@ds229732.mlab.com:29732/lab6students')
+var student = conn5.model('student', studentSchema);
+
 //create app
 const app = express();
 const server = app.listen(8000);
@@ -80,11 +91,16 @@ app.get('/InstructorCourse', function(req, res) {
     res.sendFile('InstructorCourse.html', {root: __dirname })
 });
 
+app.get('/StudentCourse', function(req, res){
+    res.sendFile('StudentCourse.html', {root: __dirname})
+})
 app.get('/CreateAccount', function(req, res) {
     res.sendFile('CreateAccount.html', {root: __dirname })
 });
 
-
+app.get('/StudentDashboard', function(req, res){
+    res.sendFile('StudentDashboard.html', {root: __dirname })
+})
 app.get('/InstructorDashboard', function(req, res) {
     res.sendFile('InstructorDashboard.html', {root: __dirname })
 });
@@ -116,6 +132,22 @@ io.on('connection',(socket)=>{
             }
         });
     }
+    else {
+         var obj = {
+            studentName: data.lastName,
+            studentEmail: data.email,
+            classIDs:[],
+            classNames:[]
+        }
+        new student(obj).save((error) =>{
+            if(error){
+                console.log("could not save student");
+            }
+            else {
+               // conn5.close();
+            }
+        });
+    }
   });
   socket.on("createNewCourse", (data)=>{
     var id = Math.floor(Math.random()*6000);
@@ -134,6 +166,14 @@ io.on('connection',(socket)=>{
     //Save course to course database
     data.classID = id;
     data.polls = [];
+    for(var i = 0; i < data.students.length; i++){
+        student.findOneAndUpdate(
+            { "studentEmail": data.students[i] }, 
+            {$push: { classIDs: id, classNames: data.courseName } },
+            {new: true},
+            (err, updatedDoc)=>{
+            })
+    }
     new course(data).save((error) => {
         if(error){
             console.log('oops! Could not save course');
@@ -230,12 +270,24 @@ socket.on("checkForInstructor", (data)=>{
              if(x.userType == "instructor"){
                  socket.emit("loginInstructor", x);
              }
+             else{
+                 socket.emit("loginStudent", x);
+             }
             }
         });
   })
 
   socket.on("getInstructorClasses", (data)=>{
         instructor.findOne({"instructorEmail":data.email}, (err, info)=>{
+           console.log("id's found:" + info.classIDs);
+            if(info){
+                     socket.emit("classInfo", info);
+            }
+        })
+  })
+
+  socket.on("getStudentClasses", (data)=>{
+        student.findOne({"studentEmail":data.email}, (err, info)=>{
            console.log("id's found:" + info.classIDs);
             if(info){
                      socket.emit("classInfo", info);

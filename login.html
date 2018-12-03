@@ -154,9 +154,13 @@
       });
   })
   socket.on("loginInstructor", (data)=>{
-      console.log("hello");
       sessionStorage.setItem("userEmail", data.email);
       window.location.href = "InstructorDashboard";
+  })
+
+  socket.on("loginStudent", (data)=>{
+      sessionStorage.setItem("userEmail", data.email);
+      window.location.href = "StudentDashboard";
   })
   </script>
 </body>

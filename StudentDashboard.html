@@ -8,7 +8,7 @@
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script> 
         <style>
             .btn {
                 border: none;
@@ -87,12 +87,30 @@
     </ul>
         <br>
 
-    <div class="container">
-
-        <a href="StudentCourse.html"> <button type="button" class="btn btn-primary btn-lg btn-block basic">CS 180</button></a> <br><br>
-        <a href="StudentCourse.html"> <button type="button" class="btn btn-primary btn-lg btn-block basic">CS 240</button></a> <br><br><a href="StudentCourse.html"> <button type="button" class="btn btn-primary btn-lg btn-block basic">CS 252</button></a> <br><br><a href="StudentCourse.html"> <button type="button" class="btn btn-primary btn-lg btn-block basic">CS 250</button></a> <br><br>
+    <div id="container" class="container">
+        
         </div>
         
 
     </body>
+    <script>
+    var socket = io.connect("http://localhost:8000");
+    var user =sessionStorage.getItem('userEmail');
+
+    socket.emit('getStudentClasses', {email: user});
+
+    socket.on('classInfo', (data)=>{
+        for(var i = 0; i < data.classIDs.length; i++){
+                document.getElementById("container").innerHTML+="<button type='button' id='"+data.classIDs[i]+"' class='btn btn-primary btn-lg btn-block basic'>" + data.classNames[i] + "</button>";
+            }
+
+            var classes = document.getElementsByClassName("btn");
+            for(var i = 0; i < classes.length; i++){
+                classes[i].addEventListener("click", (e)=>{
+                    sessionStorage.setItem("currentClass",e.target.id);
+                    window.location.href = "StudentCourse";
+                })
+            }
+    })
+    </script>
     </html>
