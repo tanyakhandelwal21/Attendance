@@ -6,9 +6,10 @@
       <h1>Add a new poll</h1>
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
+ 
         <style>
             .btn {
                 border: none;
@@ -79,24 +80,47 @@ input[type=submit]:hover {
     <body>
     <div class="container">
         
-        <form action="/action_page.php">
-        Question: <input type="text" name="question" value="Enter the question here"><br><br>
-A: <input type="text2" name="optionA" placeholder="Option A"><br><br>
-B: <input type="text2" name="optionB" placeholder="Option B"><br><br>
-C: <input type="text2" name="optionC" placeholder="Option C"><br><br>
-D: <input type="text2" name="optionD" placeholder="Option D"><br><br>
+        Question: <input type="text" id="question" name="question" value="Enter the question here"><br><br>
+A: <input id="a" type="text2" name="optionA" placeholder="Option A"><br><br>
+B: <input id="b" type="text2" name="optionB" placeholder="Option B"><br><br>
+C: <input id="c" type="text2" name="optionC" placeholder="Option C"><br><br>
+D: <input id="d" type="text2" name="optionD" placeholder="Option D"><br><br>
             Select the correct answer:
-        <select name="cars">
+        <select id="correctAnswer" name="cars">
     <option value="AnsoptionA">A</option>
     <option value="AnsoptionB">B</option>
     <option value="AnsoptionC">C</option>
     <option value="AnsoptionD">D</option>
   </select>
   <br><br>
-            <a href="InstructorCourse.html"><input type="submit" value="Add"></a>
-</form>
+        <input id="submitbtn" type="submit" value="Add">
         </div>
 
 
     </body>
+<script>
+var socket = io.connect("http://localhost:8000");
+    
+    document.getElementById("submitbtn").addEventListener("click", ()=>{
+
+ var question = document.getElementById("question").value;
+        var a = document.getElementById("a").value;
+        var b = document.getElementById("b").value;
+        var c = document.getElementById("c").value;
+        var d = document.getElementById("d").value;
+        var correctAnswer = document.getElementById("correctAnswer");
+        var strUser = correctAnswer.options[correctAnswer.selectedIndex].text;
+        
+        var data = {
+            classID:sessionStorage.getItem("currentClass"),
+            question:question,
+            correctAnswer:strUser,
+            options:[a,b,c,d],
+            studentsVoted:[]
+        }
+
+         socket.emit("createPoll", data);
+
+    });
+    </script>
     </html>

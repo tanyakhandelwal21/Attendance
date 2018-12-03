@@ -6,6 +6,7 @@
   <h1>CS 180: Current Poll</h1>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     
@@ -68,7 +69,9 @@ li a {
     text-decoration: none;
     font-family: serif
 }
-
+#endPoll:hover{
+    cursor:pointer;
+}
 li a:hover {
     background-color: #681C1C;
     color: white;
@@ -87,12 +90,31 @@ li a:hover {
 <div class="container">
    
   <h2>Current Poll</h2>
-    <p> Question: How amazing is this color?</p>
-    <p> A: Good <br> B: Bad <br> C: Ugly<br> D: Best thing ever </p>
+    <p id="question"> Question: How amazing is this color?</p>
+    <p> <span id="optA"> A: Good </span><br> <span id="optB"> B: Bad </span><br> <span id="optC">C: Ugly</span><br> <span id="optD">D: Best thing ever</span> </p>
     
     <p> NEED TO DECIDE WHAT KIND OF GRAPHS AND ALL COME HERE TO SHOW CURRENT POLLING</p>
     </div>
     
-
+<p id="endPoll">End poll</p>
 </body>
+<script>
+var socket = io.connect("http://localhost:8000");
+var poll = sessionStorage.getItem("currentPoll");
+socket.emit("getPollStatus", {pollID: poll});
+
+socket.on("returnPollInfo", (data)=>{
+    document.getElementById("question").innerHTML = data.question;
+    document.getElementById("optA").innerHTML = data.options[0];
+    document.getElementById("optB").innerHTML = data.options[1];
+    document.getElementById("optC").innerHTML = data.options[2];
+    document.getElementById("optD").innerHTML = data.options[3];
+})
+document.getElementById("endPoll").addEventListener("click", ()=>{
+    socket.emit("checkForInstructor", {user: sessionStorage.getItem("userEmail"), pollID: sessionStorage.getItem("currentPoll")});
+    socket.on("pollEnded", (data)=>{
+        socket.emit("endPoll", {pollID: poll});
+    })
+})
+</script>
 </html>

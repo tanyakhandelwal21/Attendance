@@ -6,6 +6,7 @@
   <h1>CS 180</h1>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     
@@ -87,14 +88,39 @@ li a:hover {
 <div class="container">
    
   <h2>Current Poll</h2>
-    <a href="CurrentPoll.html"><button type="button" class="btn btn-primary btn-lg btn-block basic">How amazing is this color?</button></a>
+  <div id="currentPolls">
     
+    </div>
     <h2> Past Polls</h2>
-    <button type="button" class="btn btn-primary btn-lg btn-block basic">How amazing is this application?</button>
-    <button type="button" class="btn btn-primary btn-lg btn-block basic">What's the best thing about this class?</button>
-    <a href="NewPoll.html"><button type ="button" class="btn btn-primary btn-lg btn-block new">+ Add a new poll</button></a>
+    <div id="pastPolls">
+    </div>
+    <a href="NewPoll"><button type ="button" class="btn btn-primary btn-lg btn-block new">+ Add a new poll</button></a>
     </div>
     
 
 </body>
+<script>
+    var socket = io.connect("http://localhost:8000");
+    socket.emit("getPolls", {classID: sessionStorage.getItem("currentClass")});
+    socket.on("returnPolls", (data)=>{
+        var polls = data.polls;
+        var pollQuestions = data.pollQuestions;
+        for(var i = 0; i < polls.length; i++){
+            socket.emit("getPollStatus", {pollID: polls[i]});
+        }
+    })
+    function currentClicked(e){
+        sessionStorage.setItem("currentPoll", e);
+        alert(sessionStorage.getItem("currentPoll"));
+        window.location.href = "CurrentPoll";
+    }
+    socket.on("returnPollInfo", (data)=>{
+        if(data.status == "current"){
+            document.getElementById("currentPolls").innerHTML+= "<button id='" + data.pollID + "' onClick='currentClicked(this.id)' type='button' class='btn btn-primary btn-lg btn-block basic'>"+data.question + "</button>";
+        }
+        else{
+             document.getElementById("pastPolls").innerHTML+= "<button id='" + data.pollID + "' type='button' class='btn btn-primary btn-lg btn-block basic'>"+data.question + "</button>";
+        }
+    })
+</script>
 </html>
