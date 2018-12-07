@@ -100,7 +100,7 @@
 
     </body>
         <script>
-        var socket = io.connect("http://localhost:8000");
+        var socket = io.connect("https://labv4.glitch.me/");
 var poll = sessionStorage.getItem("currentPoll");
 socket.emit("getPollStatus", {pollID: poll});
 socket.emit("checkRange", {user:sessionStorage.getItem("userEmail"), pollID: sessionStorage.getItem("currentPoll")});

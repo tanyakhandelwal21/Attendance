@@ -100,7 +100,7 @@ li a:hover {
 </body>
 <script>
     document.getElementById('className').innerHTML =sessionStorage.getItem('currentClassName');
-    var socket = io.connect("http://localhost:8000");
+    var socket = io.connect("https://labv4.glitch.me/");
     socket.emit("getPolls", {classID: sessionStorage.getItem("currentClass")});
     socket.on("returnPolls", (data)=>{
         var polls = data.polls;

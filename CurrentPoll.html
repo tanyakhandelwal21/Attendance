@@ -139,7 +139,7 @@ li a:hover {
 <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 </body>
 <script>
-var socket = io.connect("http://localhost:8000");
+var socket = io.connect("https://labv4.glitch.me/");
 var poll = sessionStorage.getItem("currentPoll");
 socket.emit("getPollStatus", {pollID: poll});
 

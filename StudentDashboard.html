@@ -94,7 +94,7 @@
 
     </body>
     <script>
-    var socket = io.connect("http://localhost:8000");
+    var socket = io.connect("https://labv4.glitch.me/");
     var user =sessionStorage.getItem('userEmail');
     socket.emit('getStudentClasses', {email: user});
 

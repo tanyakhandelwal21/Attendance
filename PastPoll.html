@@ -127,7 +127,7 @@ li a:hover {
     </body>
 <script>
     document.getElementById("className").innerHTML =sessionStorage.getItem('currentClassName')+": Past Poll";
-    var socket = io.connect("http://localhost:8000");
+    var socket = io.connect("https://labv4.glitch.me/");
 var poll = sessionStorage.getItem("currentPoll");
 var studentsInClass=[];
 var studentsVoted = [];
