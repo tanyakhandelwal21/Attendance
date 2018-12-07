@@ -253,7 +253,7 @@ socket.on('vote', (data)=>{
 
 
 
-                    if(latitudeDiff < .001 && longitudeDiff < .001){
+                    if(latitudeDiff < .0001 && longitudeDiff < .0001){
                         for(var i = 0; i < info.studentsVoted.length; i++){
                             if(info.studentsVoted[i] == user){
                                 console.log('student already voted!');
