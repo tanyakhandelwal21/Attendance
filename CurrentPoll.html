@@ -127,6 +127,8 @@ li a:hover {
 <div class="container">
    
   <h2>Current Poll</h2>
+  <h3 id="numberOfVotes">Number of current votes: 0</h3>
+  <h3 id="studentsInRange">Number of students in range: 0</h3>
     <p id="question"> Question: How amazing is this color?</p>
     <p> <span id="optA"> A: Good </span><br> <span id="optB"> B: Bad </span><br> <span id="optC">C: Ugly</span><br> <span id="optD">D: Best thing ever</span> </p>
     </div>
@@ -142,14 +144,21 @@ var poll = sessionStorage.getItem("currentPoll");
 socket.emit("getPollStatus", {pollID: poll});
 
 socket.on("returnPollInfo", (data)=>{
+    document.getElementById("studentsInRange").innerHTML = "Number of students in range: "+data.studentsInRange;
+    document.getElementById("numberOfVotes").innerHTML = "Number of votes: "+data.numberOfVotes;
     document.getElementById("question").innerHTML = data.question;
     document.getElementById("optA").innerHTML = data.options[0];
     document.getElementById("optB").innerHTML = data.options[1];
     document.getElementById("optC").innerHTML = data.options[2];
     document.getElementById("optD").innerHTML = data.options[3];
+    document.getElementById("numberOfVotes").innerHTML = "Number of current Votes: " + data.numberOfVotes;
     var responses= getVotes(data.studentVotes);
-    console.log(responses);
+    if(!data.updateStudents){
     makeChart(responses);
+    }
+})
+socket.on("updateStudents", (data)=>{
+    document.getElementById("studentsInRange").innerHTML = "Number of students in range: "+data.studentsInRange;
 })
 document.getElementById("endPoll").addEventListener("click", ()=>{
     socket.emit("checkForInstructor", {user: sessionStorage.getItem("userEmail"), pollID: sessionStorage.getItem("currentPoll")});
@@ -157,6 +166,9 @@ document.getElementById("endPoll").addEventListener("click", ()=>{
         socket.emit("endPoll", {pollID: poll});
     })
 })
+ socket.on("updateStudentsInRange", function(){
+        socket.emit("getPollStatus", {pollID: poll, updateStudents:true});
+    })
 function makeChart(arr){
     var chart = new CanvasJS.Chart("chartContainer", {
 	    animationEnabled: true,

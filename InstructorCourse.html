@@ -54,7 +54,6 @@
     padding: 0;
     overflow: hidden;
     background-color: #4E0A0A;
-    width: ;
 }
 
 li {
@@ -112,15 +111,19 @@ li a:hover {
     })
     function currentClicked(e){
         sessionStorage.setItem("currentPoll", e);
-        alert(sessionStorage.getItem("currentPoll"));
         window.location.href = "CurrentPoll";
+    }
+
+    function pastClicked(e){
+        sessionStorage.setItem("currentPoll", e);
+        window.location.href = "PastPoll";
     }
     socket.on("returnPollInfo", (data)=>{
         if(data.status == "current"){
             document.getElementById("currentPolls").innerHTML+= "<button id='" + data.pollID + "' onClick='currentClicked(this.id)' type='button' class='btn btn-primary btn-lg btn-block basic'>"+data.question + "</button>";
         }
         else{
-             document.getElementById("pastPolls").innerHTML+= "<button id='" + data.pollID + "' type='button' class='btn btn-primary btn-lg btn-block basic'>"+data.question + "</button>";
+             document.getElementById("pastPolls").innerHTML+= "<button id='" + data.pollID + "' onClick='pastClicked(this.id)' type='button' class='btn btn-primary btn-lg btn-block basic'>"+data.question + "</button>";
         }
     })
 </script>

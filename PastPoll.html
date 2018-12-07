@@ -3,7 +3,7 @@
 <head>
   <title>CS 180: Past Poll</title>
   <meta charset="utf-8">
-  <h1>CS 180: Past Poll</h1>
+  <h1 id="className">CS 180: Past Poll</h1>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
@@ -96,50 +96,27 @@ li a:hover {
             background-color: #FFFFE9
         }
     </style>
-    <script>
-window.onload = function () {
-	
-var chart = new CanvasJS.Chart("chartContainer", {
-	animationEnabled: true,
-	
-	
-	axisX:{
-		interval: 1
-	},
-	axisY2:{
-		gridColor: "#681C1C",
-		title: "Number of responses",
-        color: "#681C1C"
-	},
-	data: [{
-		type: "bar",
-		name: "companies",
-		axisYType: "secondary",
-		color: "#014D65",
-		dataPoints: [
-			{ y: 29, label: "D" },
-			{ y: 52, label: "C" },
-			{ y: 103, label: "B" },
-			{ y: 134, label: "A" }
-		]
-	}]
-});
-chart.render();
-
-}
-</script>
+  
 </head>
 <body>
      
 <ul>
-  <li><a class="active" href="InstructorCourse.html">Back to Course Page</a></li>
+  <li><a class="active" href="InstructorCourse">Back to Course Page</a></li>
 </ul>
 <div class="container">
    <br><br>
     <p id="question"> Question: How amazing is this color?</p>
     <p> <span id="optA"> A: Good </span><br> <span id="optB"> B: Bad </span><br> <span id="optC">C: Ugly</span><br> <span id="optD">D: Best thing ever</span> </p>
-    Correct Answer- D: Best Thing Ever
-    
+    <h3>Correct Answer- D: Best Thing Ever</h3>
+<div id="correctAnswers">
+    <h3>Correct Answers</h3>
+</div>
+<div id="incorrectAnswers">
+    <h3>Incorrect Answers</h3>
+</div>
+<div id="notVoted">
+    <h3 id="NotVoted">Not Voted</h3>
+</div>
     </div>
     
     
@@ -148,5 +125,106 @@ chart.render();
 <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 
     </body>
-
+<script>
+    document.getElementById("className").innerHTML =sessionStorage.getItem('currentClassName')+": Past Poll";
+    var socket = io.connect("http://localhost:8000");
+var poll = sessionStorage.getItem("currentPoll");
+var studentsInClass=[];
+var studentsVoted = [];
+socket.emit("getPollStatus", {pollID: poll});
+socket.emit("getClass", {classID:sessionStorage.getItem("currentClass")});
+socket.on("returnClass", (data)=>{
+    studentsInClass = data.students;
+    var x = findDifference(studentsInClass, studentsVoted);
+    document.getElementById("notVoted").innerHTML = "";
+     document.getElementById("notVoted").innerHTML += "<h3>Not Voted:</h3>";
+    for(var i = 0; i < x.length; i++){
+        document.getElementById("notVoted").innerHTML += "<p>"+x[i]+"</p>";
+    }
+})
+socket.on("returnPollInfo", (data)=>{
+    socket.emit("getClass", {classID:sessionStorage.getItem("currentClass")});
+    document.getElementById("question").innerHTML = data.question;
+    document.getElementById("optA").innerHTML = data.options[0];
+    document.getElementById("optB").innerHTML = data.options[1];
+    document.getElementById("optC").innerHTML = data.options[2];
+    document.getElementById("optD").innerHTML = data.options[3];
+    var responses= getVotes(data.studentVotes);
+    var studentArray = data.studentsVoted;
+    studentsVoted = data.studentsVoted;
+    for(var i = 0; i <studentArray.length; i++){
+        if(data.studentVotes[i] == data.correctAnswer){
+            document.getElementById("correctAnswers").innerHTML += "<p>"+studentArray[i]+"</p>";
+        }
+        else{
+            document.getElementById("incorrectAnswers").innerHTML += "<p>"+studentArray[i]+"</p>";
+        }
+    }
+    if(!data.updateStudents){
+        makeChart(responses);
+    }
+})
+function findDifference(arr, arr2){
+    var difference = [];
+    for(var i = 0; i <arr.length; i++){
+        var contains = false;
+        for(var j = 0; j < arr2.length; j++){
+            if(arr[i] == arr2[j]){
+                contains = true;
+            }
+        }
+        if(!contains){
+            difference.push(arr[i]);
+        }
+    }
+    console.log(difference);
+    return difference;
+}
+function getVotes(arr){
+    var answers = [0,0,0,0];
+    for(var i = 0; i < arr.length;i++){
+        switch(arr[i]){
+            case 'A':
+                answers[0]++;
+                break;
+            case 'B':
+                answers[1]++;
+                break;
+            case 'C':
+                answers[2]++;
+                break;
+            default:
+                answers[3]++;
+                break;
+        }
+    }
+    return answers;
+}
+function makeChart(arr){
+    var chart = new CanvasJS.Chart("chartContainer", {
+	    animationEnabled: true,
+	    axisX:{
+		    interval: 1
+	    },
+	    axisY2:{
+		    gridColor: "#681C1C",
+		    title: "Number of responses",
+            color: "#681C1C"
+	    },
+	    data: [{
+		    type: "bar",
+		    name: "companies",
+		    axisYType: "secondary",
+		    color: "#014D65",
+		    dataPoints: [
+			    { y: arr[3], label: "D" },
+			    { y: arr[2], label: "C" },
+			    { y: arr[1], label: "B" },
+			    { y: arr[0], label: "A" }
+		    ]
+	    }]
+    });
+    chart.render();
+}
+</script>
 </html>

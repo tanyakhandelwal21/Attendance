@@ -43,6 +43,8 @@ var pollSchema = {
     options:[String],
     studentsVoted:[String],
     studentVotes:[String],
+    numberOfVotes:Number,
+    studentsInRange:Number,
     status:String
 }
 
@@ -80,6 +82,9 @@ app.get('/', function(req, res) {
     res.sendFile('login.html', {root: __dirname })
 });
 
+app.get('/PastPoll', function(req, res){
+    res.sendFile('PastPoll.html', {root: __dirname });
+})
 app.get('/NewPoll', function(req, res) {
     res.sendFile('NewPoll.html', {root: __dirname })
 });
@@ -155,6 +160,13 @@ io.on('connection',(socket)=>{
         });
     }
   });
+  socket.on("getClass", (data)=>{
+      course.findOne({classID: data.classID}, (err, info)=>{
+            if(info){
+                socket.emit("returnClass", info);
+            }
+        })
+  })
   socket.on("createNewCourse", (data)=>{
     var id = Math.floor(Math.random()*6000);
     while(1){
@@ -261,7 +273,7 @@ socket.on('vote', (data)=>{
                         }
                          poll.findOneAndUpdate(
                         { "pollID": pollID },
-                        { $push: { studentsVoted: user, studentVotes: vote } },
+                        { $push: { studentsVoted: user, studentVotes: vote }, $inc: {numberOfVotes: 1} },
                         { new: true },
                         (err, updatedDoc) => {
                         // 
@@ -278,9 +290,73 @@ socket.on('vote', (data)=>{
         }
     })
 })
+socket.on("checkRange", (data)=>{
+ var studentLoc;
+    var instructorLoc;
+    Person.findOne({'email': data.user}, (err, info)=>{
+            if(info){
+                studentLoc = info.lastLoggedIn;
+            }
+    })
+    poll.findOne({'pollID':data.pollID}, (err, info)=>{
+        if(info){
+            course.findOne({'classID': info.classID}, (err, t)=>{
+                Person.findOne({email: t.Instructor}, (err, r)=>{
+                    instructorLoc = r.lastLoggedIn;
+                    var latitudeMax = Math.max(studentLoc[0], instructorLoc[0]);
+                    var latitudeMin = Math.min(studentLoc[0], instructorLoc[0]);
+                    var latitudeDiff;
+                    var longitudeDiff;
+                    latitudeDiff = latitudeMax-latitudeMin;
+                    var longitudeMax = Math.max(studentLoc[1], instructorLoc[1]);
+                    var longitudeMin = Math.min(studentLoc[1], instructorLoc[1]);
+                    longitudeDiff = longitudeMax - longitudeMin;
+                    
+
+
+
+                    if(latitudeDiff < .001 && longitudeDiff < .001){
+                        if(data.unload){
+                            poll.findOneAndUpdate(
+                        { "pollID": data.pollID },
+                        {  $inc: {studentsInRange: -1} },
+                        { new: true },
+                        (err, updatedDoc) => {
+                        // 
+
+                    })
+                        }
+                        else {
+                        poll.findOneAndUpdate(
+                        { "pollID": data.pollID },
+                        {  $inc: {studentsInRange: 1} },
+                        { new: true },
+                        (err, updatedDoc) => {
+                        // 
+
+                    })
+                        }
+                        var obj = {};
+                        poll.findOne({'pollID': data.pollID}, (err, info)=>{
+                            obj.numberOfVotes = info.numberOfVotes;
+                            obj.studentsInRange = info.studentsInRange;
+                            socket.broadcast.emit("updateStudentsInRange");
+                        })
+
+                    }
+                })
+            })
+        }
+    })
+})
 socket.on("getPollStatus", (data)=>{
     poll.findOne({pollID: data.pollID}, (err, info)=>{
+        if(data.updateStudents){
+            socket.emit("updateStudents", info);
+        }
+        else{
         socket.emit("returnPollInfo", info);
+        }
     })
 })
 socket.on("createPoll", (data)=>{
@@ -300,6 +376,8 @@ socket.on("createPoll", (data)=>{
     //Save course to course database
     data.pollID = id;
     data.status = "current";
+    data.numberOfVotes = 0;
+    data.studentsInRange = 0;
     new poll(data).save((error) => {
         if(error){
             console.log('oops! Could not save course');

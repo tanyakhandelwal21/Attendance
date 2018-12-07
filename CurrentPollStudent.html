@@ -103,7 +103,10 @@
         var socket = io.connect("http://localhost:8000");
 var poll = sessionStorage.getItem("currentPoll");
 socket.emit("getPollStatus", {pollID: poll});
-
+socket.emit("checkRange", {user:sessionStorage.getItem("userEmail"), pollID: sessionStorage.getItem("currentPoll")});
+window.onunload = function(){
+    socket.emit("checkRange", {unload: true, user:sessionStorage.getItem("userEmail"), pollID: sessionStorage.getItem("currentPoll")});
+}
 socket.on("returnPollInfo", (data)=>{
     document.getElementById("question").innerHTML = data.question;
     document.getElementById("optA").innerHTML = data.options[0];

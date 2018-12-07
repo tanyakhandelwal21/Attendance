@@ -80,7 +80,6 @@ input[type=submit]:hover {
     padding: 0;
     overflow: hidden;
     background-color: #4E0A0A;
-    width: ;
 }
 
 li {
@@ -131,6 +130,7 @@ li a:hover {
         }
 
         socket.emit("createNewCourse", data);
+        window.location.href="InstructorDashboard";
     }
     document.getElementById("submitbtn").addEventListener("click", createNewClass);
     </script>
