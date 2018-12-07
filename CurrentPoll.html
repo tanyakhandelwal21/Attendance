@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>CS 180: Current Poll</title>
+  <title id="classNameTitle">CS 180: Current Poll</title>
   <meta charset="utf-8">
-  <h1>CS 180: Current Poll</h1>
+  <h1 id="className">CS 180: Current Poll</h1>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
@@ -139,6 +139,8 @@ li a:hover {
 <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 </body>
 <script>
+    document.getElementById('className').innerHTML =sessionStorage.getItem('currentClassName')+": Current Poll";
+    document.getElementById('classNameTitle').innerHTML =sessionStorage.getItem('currentClassName');
 var socket = io.connect("http://localhost:8000");
 var poll = sessionStorage.getItem("currentPoll");
 socket.emit("getPollStatus", {pollID: poll});
