@@ -152,6 +152,7 @@
             password,
             userType:type
         };
+        data.lastLoggedIn = [];
         socket.emit("register", data);
         alert("Account registered!");
     })

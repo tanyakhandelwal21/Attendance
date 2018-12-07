@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>CS 180: Current Poll</title>
+  <title>CS 180: Past Poll</title>
   <meta charset="utf-8">
-  <h1>CS 180: Current Poll</h1>
+  <h1>CS 180: Past Poll</h1>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
@@ -24,7 +24,6 @@
             background-color: #FFFFE9;
             font-size: 40px;
         }
-
         .new:hover {
             background-color: #FFFFE9;
             color: #4E0A0A;
@@ -56,11 +55,9 @@
     background-color: #4E0A0A;
     width: ;
 }
-
 li {
     float: right;
 }
-
 li a {
     display: block;
     color: white;
@@ -69,18 +66,7 @@ li a {
     text-decoration: none;
     font-family: serif
 }
-#endPoll:hover{
-    cursor:pointer;
-}
-li a:hover {
-    background-color: #681C1C;
-    color: white;
-}
-        
-        body {
-            background-color: #FFFFE9
-        }
-        button[type=submit] {
+         button[type=submit] {
     text-align: center;
     align-content: center;
     align-items: center;
@@ -96,73 +82,69 @@ li a:hover {
                 border: none;
                 border-radius: 4px;
                 cursor: pointer;
-        }
-        #endPoll:hover{
+}
+#endPoll:hover{
     cursor:pointer;
-            background-color: #FFFFE9;
+}
+li a:hover {
+    background-color: #681C1C;
+    color: white;
+}
+        
+        body {
+            background-color: #FFFFE9
         }
     </style>
+    <script>
+window.onload = function () {
+	
+var chart = new CanvasJS.Chart("chartContainer", {
+	animationEnabled: true,
+	
+	
+	axisX:{
+		interval: 1
+	},
+	axisY2:{
+		gridColor: "#681C1C",
+		title: "Number of responses",
+        color: "#681C1C"
+	},
+	data: [{
+		type: "bar",
+		name: "companies",
+		axisYType: "secondary",
+		color: "#014D65",
+		dataPoints: [
+			{ y: 29, label: "D" },
+			{ y: 52, label: "C" },
+			{ y: 103, label: "B" },
+			{ y: 134, label: "A" }
+		]
+	}]
+});
+chart.render();
+}
+</script>
 </head>
 <body>
      
 <ul>
-  <li><a class="active" href="InstructorCourse">Back to Course Page</a></li>
+  <li><a class="active" href="InstructorCourse.html">Back to Course Page</a></li>
 </ul>
 <div class="container">
-   
-  <h2>Current Poll</h2>
+   <br><br>
     <p id="question"> Question: How amazing is this color?</p>
     <p> <span id="optA"> A: Good </span><br> <span id="optB"> B: Bad </span><br> <span id="optC">C: Ugly</span><br> <span id="optD">D: Best thing ever</span> </p>
+    Correct Answer- D: Best Thing Ever
+    
     </div>
     
-  <button type="submit" id="endPoll">End Poll</button>
+    
     <br>
     <div id="chartContainer" style="height: 300px; width: 100%;"></div>
 <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-</body>
-<script>
-    window.onload = function () {
-        var chart = new CanvasJS.Chart("chartContainer", {
-	    animationEnabled: true,
-	    axisX:{
-		    interval: 1
-	    },
-	    axisY2:{
-		    gridColor: "#681C1C",
-		    title: "Number of responses",
-            color: "#681C1C"
-	    },
-	    data: [{
-		    type: "bar",
-		    name: "companies",
-		    axisYType: "secondary",
-		    color: "#014D65",
-		    dataPoints: [
-			    { y: 29, label: "D" },
-			    { y: 52, label: "C" },
-			    { y: 103, label: "B" },
-			    { y: 134, label: "A" }
-		    ]
-	    }]
-    });
-    chart.render();
- }
-var socket = io.connect("http://localhost:8000");
-var poll = sessionStorage.getItem("currentPoll");
-socket.emit("getPollStatus", {pollID: poll});
 
-socket.on("returnPollInfo", (data)=>{
-    document.getElementById("question").innerHTML = data.question;
-    document.getElementById("optA").innerHTML = data.options[0];
-    document.getElementById("optB").innerHTML = data.options[1];
-    document.getElementById("optC").innerHTML = data.options[2];
-    document.getElementById("optD").innerHTML = data.options[3];
-})
-document.getElementById("endPoll").addEventListener("click", ()=>{
-    socket.emit("checkForInstructor", {user: sessionStorage.getItem("userEmail"), pollID: sessionStorage.getItem("currentPoll")});
-    socket.on("pollEnded", (data)=>{
-        socket.emit("endPoll", {pollID: poll});
-    })
-})
-</script>
+    </body>
+
 </html>

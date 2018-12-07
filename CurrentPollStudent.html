@@ -124,7 +124,12 @@ socket.on("returnPollInfo", (data)=>{
         socket.emit('vote', {id: e.target.id, user: sessionStorage.getItem("userEmail"), pollID: sessionStorage.getItem('currentPoll')});
     })
 })
-
+socket.on("outOfRange", function(){
+    alert("You're out of range for this poll!");
+})
+socket.on("voteRegistered", function(){
+    alert("Vote has been registered, " + sessionStorage.getItem("userEmail") + "!");
+})
         </script>
         
     </html>

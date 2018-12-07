@@ -146,12 +146,40 @@
   <script>
   var socket = io.connect("http://localhost:8000");
   document.getElementById("submitbtn").addEventListener("click", ()=>{
-      var email = document.getElementById("email").value;
+      // Set up our HTTP request
+var xhr = new XMLHttpRequest();
+
+// Setup our listener to process completed requests
+xhr.onload = function () {
+
+	// Process our return data
+	if (this.readyState == 4 && xhr.status >= 200 && xhr.status < 300) {
+		// What do when the request is successful
+		var my = JSON.parse(xhr.responseText);
+		var location = my.loc.split(",");
+        var email = document.getElementById("email").value;
       var password = document.getElementById("password").value;
       socket.emit("login", {
           email,
-          password
+          password,
+          lastLoggedIn: location
       });
+	} else {
+		// What do when the request fails
+		console.log('The request failed!');
+	}
+
+	// Code that should run regardless of the request status
+	console.log('Finding location...');
+};
+
+// Create and send a GET request
+// The first argument is the post type (GET, POST, PUT, DELETE, etc.)
+// The second argument is the endpoint URL
+xhr.open('GET', 'https://ipinfo.io/json?token=7db9e773954261');
+xhr.send();
+
+    
   })
   socket.on("loginInstructor", (data)=>{
       sessionStorage.setItem("userEmail", data.email);

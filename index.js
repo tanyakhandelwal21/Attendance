@@ -9,6 +9,7 @@ var personSchema = {
   email:String,
   password:String,
   userType:String,
+  lastLoggedIn: [Number]
 };
 
 var studentSchema = {
@@ -196,8 +197,14 @@ io.on('connection',(socket)=>{
   })
 })
 socket.on('vote', (data)=>{
-    console.log("made it to vote event");
     var user = data.user;
+    var studentLoc;
+    var instructorLoc;
+    Person.findOne({'email': user}, (err, info)=>{
+            if(info){
+                studentLoc = info.lastLoggedIn;
+            }
+    })
     var vote;
     switch(data.id){
         case 'optA':
@@ -214,35 +221,60 @@ socket.on('vote', (data)=>{
         break;
     }
     pollID = data.pollID;
+
     var studentAlreadyVoted=false;
     var votedIndex = -1;
     poll.findOne({'pollID':pollID}, (err, info)=>{
         if(info){
-            for(var i = 0; i < info.studentsVoted.length; i++){
-                if(info.studentsVoted[i] == user){
-                    console.log('student already voted!');
-                    studentAlreadyVoted = true;
-                    info.studentVotes[i] = vote;
-                     poll.findOneAndUpdate(
+            course.findOne({'classID': info.classID}, (err, t)=>{
+                Person.findOne({email: t.Instructor}, (err, r)=>{
+                    instructorLoc = r.lastLoggedIn;
+                    var latitudeMax = Math.max(studentLoc[0], instructorLoc[0]);
+                    var latitudeMin = Math.min(studentLoc[0], instructorLoc[0]);
+                    var latitudeDiff;
+                    var longitudeDiff;
+                    latitudeDiff = latitudeMax-latitudeMin;
+                    var longitudeMax = Math.max(studentLoc[1], instructorLoc[1]);
+                    var longitudeMin = Math.min(studentLoc[1], instructorLoc[1]);
+                    longitudeDiff = longitudeMax - longitudeMin;
+                    
+
+
+
+                    if(latitudeDiff < .001 && longitudeDiff < .001){
+                        for(var i = 0; i < info.studentsVoted.length; i++){
+                            if(info.studentsVoted[i] == user){
+                                console.log('student already voted!');
+                                studentAlreadyVoted = true;
+                                info.studentVotes[i] = vote;
+                                poll.findOneAndUpdate(
+                                { "pollID": pollID },
+                                { $set: { studentsVoted: info.studentsVoted, studentVotes: info.studentVotes } },
+                                { new: true },
+                                (err, updatedDoc) => {
+    // 
+                                })
+                                socket.emit("voteRegistered");
+                                return;
+                           }
+                        }
+                         poll.findOneAndUpdate(
                         { "pollID": pollID },
-                        { $set: { studentsVoted: info.studentsVoted, studentVotes: info.studentVotes } },
+                        { $push: { studentsVoted: user, studentVotes: vote } },
                         { new: true },
                         (err, updatedDoc) => {
-    // 
-                        })
-                        return;
-                }
-            }
+                        // 
+
+                    })
+                        socket.emit("voteRegistered");
+                    }
+                    else {
+                        socket.emit("outOfRange");
+                    }
+                })
+            })
         }
     })
-    poll.findOneAndUpdate(
-  { "pollID": pollID },
-  { $push: { studentsVoted: user, studentVotes: vote } },
-  { new: true },
-  (err, updatedDoc) => {
-    // 
-
-})
 })
 socket.on("getPollStatus", (data)=>{
     poll.findOne({pollID: data.pollID}, (err, info)=>{
@@ -320,6 +352,13 @@ socket.on("checkForInstructor", (data)=>{
   socket.on("login", (data)=>{
       Person.findOne({"email":data.email, "password":data.password}, (err,x)=>{
             if(x){
+                 Person.findOneAndUpdate(
+                 { "email": data.email, "password":data.password },
+                 { $set: { lastLoggedIn: data.lastLoggedIn} },
+                 { new: true },
+                 (err, updatedDoc) => {
+                    // what ever u want to do with the updated document
+                 })
              if(x.userType == "instructor"){
                  socket.emit("loginInstructor", x);
              }
