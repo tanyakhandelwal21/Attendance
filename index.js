@@ -255,6 +255,7 @@ socket.on('vote', (data)=>{
     // 
                                 })
                                 socket.emit("voteRegistered");
+                                socket.broadcast.emit('updateChart');
                                 return;
                            }
                         }
@@ -267,6 +268,7 @@ socket.on('vote', (data)=>{
 
                     })
                         socket.emit("voteRegistered");
+                        socket.broadcast.emit('updateChart');
                     }
                     else {
                         socket.emit("outOfRange");

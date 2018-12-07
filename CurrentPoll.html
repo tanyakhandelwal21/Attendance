@@ -118,38 +118,6 @@ li a:hover {
             background-color: #FFFFE9;
         }
     </style>
-    <script>
-window.onload = function () {
-	
-var chart = new CanvasJS.Chart("chartContainer", {
-	animationEnabled: true,
-	
-	
-	axisX:{
-		interval: 1
-	},
-	axisY2:{
-		gridColor: "#681C1C",
-		title: "Number of responses",
-        color: "#681C1C"
-	},
-	data: [{
-		type: "bar",
-		name: "companies",
-		axisYType: "secondary",
-		color: "#014D65",
-		dataPoints: [
-			{ y: 29, label: "D" },
-			{ y: 52, label: "C" },
-			{ y: 103, label: "B" },
-			{ y: 134, label: "A" }
-		]
-	}]
-});
-chart.render();
-
-}
-</script>
 </head>
 <body>
      
@@ -169,8 +137,28 @@ chart.render();
 <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 </body>
 <script>
-    window.onload = function () {
-        var chart = new CanvasJS.Chart("chartContainer", {
+var socket = io.connect("http://localhost:8000");
+var poll = sessionStorage.getItem("currentPoll");
+socket.emit("getPollStatus", {pollID: poll});
+
+socket.on("returnPollInfo", (data)=>{
+    document.getElementById("question").innerHTML = data.question;
+    document.getElementById("optA").innerHTML = data.options[0];
+    document.getElementById("optB").innerHTML = data.options[1];
+    document.getElementById("optC").innerHTML = data.options[2];
+    document.getElementById("optD").innerHTML = data.options[3];
+    var responses= getVotes(data.studentVotes);
+    console.log(responses);
+    makeChart(responses);
+})
+document.getElementById("endPoll").addEventListener("click", ()=>{
+    socket.emit("checkForInstructor", {user: sessionStorage.getItem("userEmail"), pollID: sessionStorage.getItem("currentPoll")});
+    socket.on("pollEnded", (data)=>{
+        socket.emit("endPoll", {pollID: poll});
+    })
+})
+function makeChart(arr){
+    var chart = new CanvasJS.Chart("chartContainer", {
 	    animationEnabled: true,
 	    axisX:{
 		    interval: 1
@@ -186,32 +174,39 @@ chart.render();
 		    axisYType: "secondary",
 		    color: "#014D65",
 		    dataPoints: [
-			    { y: 29, label: "D" },
-			    { y: 52, label: "C" },
-			    { y: 103, label: "B" },
-			    { y: 134, label: "A" }
+			    { y: arr[3], label: "D" },
+			    { y: arr[2], label: "C" },
+			    { y: arr[1], label: "B" },
+			    { y: arr[0], label: "A" }
 		    ]
 	    }]
     });
     chart.render();
- }
-var socket = io.connect("http://localhost:8000");
-var poll = sessionStorage.getItem("currentPoll");
-socket.emit("getPollStatus", {pollID: poll});
+}
 
-socket.on("returnPollInfo", (data)=>{
-    document.getElementById("question").innerHTML = data.question;
-    document.getElementById("optA").innerHTML = data.options[0];
-    document.getElementById("optB").innerHTML = data.options[1];
-    document.getElementById("optC").innerHTML = data.options[2];
-    document.getElementById("optD").innerHTML = data.options[3];
+socket.on("updateChart", ()=>{
+    socket.emit("getPollStatus", {pollID: poll});
 })
-document.getElementById("endPoll").addEventListener("click", ()=>{
-    socket.emit("checkForInstructor", {user: sessionStorage.getItem("userEmail"), pollID: sessionStorage.getItem("currentPoll")});
-    socket.on("pollEnded", (data)=>{
-        socket.emit("endPoll", {pollID: poll});
-    })
-})
+function getVotes(arr){
+    var answers = [0,0,0,0];
+    for(var i = 0; i < arr.length;i++){
+        switch(arr[i]){
+            case 'A':
+                answers[0]++;
+                break;
+            case 'B':
+                answers[1]++;
+                break;
+            case 'C':
+                answers[2]++;
+                break;
+            default:
+                answers[3]++;
+                break;
+        }
+    }
+    return answers;
+}
 </script>
     </body>
 
