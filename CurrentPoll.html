@@ -87,6 +87,7 @@ li a {
 }
 #endPoll:hover{
     cursor:pointer;
+  
 }
 li a:hover {
     background-color: #681C1C;
@@ -106,16 +107,16 @@ li a:hover {
     margin: 0 auto;
     border: none;
     width: 80%;
-                background-color: #4E0A0A;
-                color: white;
-                padding: 14px 20px;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
+    background-color: #4E0A0A;
+    color: white;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
         }
         #endPoll:hover{
     cursor:pointer;
-            background-color: #FFFFE9;
+          background-color: #681c1c;
         }
     </style>
 </head>
@@ -168,6 +169,9 @@ document.getElementById("endPoll").addEventListener("click", ()=>{
         socket.emit("endPoll", {pollID: poll});
     })
 })
+  socket.on("endPollDone", ()=>{
+    window.location.href="InstructorCourse";
+  })
  socket.on("updateStudentsInRange", function(){
         socket.emit("getPollStatus", {pollID: poll, updateStudents:true});
     })

@@ -411,6 +411,7 @@ socket.on("endPoll", (data)=>{
   (err, updatedDoc) => {
     // what ever u want to do with the updated document
   })
+  socket.emit("endPollDone");
 })
 socket.on("checkForInstructor", (data)=>{
     console.log("user's email: "+data.user);
