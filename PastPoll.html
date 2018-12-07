@@ -107,7 +107,7 @@ li a:hover {
    <br><br>
     <p id="question"> Question: How amazing is this color?</p>
     <p> <span id="optA"> A: Good </span><br> <span id="optB"> B: Bad </span><br> <span id="optC">C: Ugly</span><br> <span id="optD">D: Best thing ever</span> </p>
-    <h3>Correct Answer- D: Best Thing Ever</h3>
+    <h3 id="correctAnswer">Correct Answer- D: Best Thing Ever</h3>
 <div id="correctAnswers">
     <h3>Correct Answers</h3>
 </div>
@@ -145,6 +145,7 @@ socket.on("returnClass", (data)=>{
 })
 socket.on("returnPollInfo", (data)=>{
     socket.emit("getClass", {classID:sessionStorage.getItem("currentClass")});
+  document.getElementById("correctAnswer").innerHTML = "Correct Answer: " + data.correctAnswer;
     document.getElementById("question").innerHTML = data.question;
     document.getElementById("optA").innerHTML = data.options[0];
     document.getElementById("optB").innerHTML = data.options[1];
