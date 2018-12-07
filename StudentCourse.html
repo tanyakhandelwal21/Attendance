@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>CS 180</title>
+  <title id="classNameTitle">CS 180</title>
   <meta charset="utf-8">
   <h1 id="className">CS 180</h1>
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -94,7 +94,9 @@ li a:hover {
 </body>
 <script>
     document.getElementById('className').innerHTML =sessionStorage.getItem('currentClassName');
-    var socket = io.connect("https://labv4.glitch.me/");
+   document.getElementById('classNameTitle').innerHTML =sessionStorage.getItem('currentClassName');
+      
+  var socket = io.connect("https://labv4.glitch.me/");
     socket.emit("getPolls", {classID: sessionStorage.getItem("currentClass")});
     socket.on("returnPolls", (data)=>{
         var polls = data.polls;
